@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot
-  name="rm_65_description">
+<robot  name="rm_65" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.transmission.xacro"/>
+<xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.gazebo.xacro"/>
+  <!-- Inertial matrix -->
+  <xacro:macro name="inertial_matrix" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+	</inertial>
+  </xacro:macro>
+  <xacro:macro name="Box_inertial_matrix" params="m l w h">
+    <inertial>
+      <mass value="${m}" />
+        <inertia ixx="${m*(h*h + l*l)/12}" ixy = "0" ixz = "0"
+          iyy="${m*(w*w + l*l)/12}" iyz= "0"
+          izz="${m*(w*w + h*h)/12}" />
+    </inertial>
+  </xacro:macro>
+  <link name="dummy">
+  </link>
+  
+  <!-- ///////////////////////////////////////   bottom_joint   ////////////////////////////////////////// -->
+  <joint name="bottom_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="bottom_link"/>
+  </joint>
+  <link name="bottom_link">
+    <visual>
+      <origin xyz=" 0 0 -0.02"  rpy="0 0 0"/>
+      <geometry>
+        <box size="0.06 0.06 0.02" />
+      </geometry>
+      <material name="Brown" />
+    </visual>
+    <collision>
+      <origin xyz=" 0 0 0"  rpy="0 0 0"/>
+      <geometry>
+        <box size="0.06 0.06 0.02" />
+      </geometry>
+    </collision>
+    <xacro:Box_inertial_matrix m="500" l="1" w="1" h="0.02"/>
+  </link>
+  
   <link
     name="base_link">
     <inertial>
@@ -41,6 +83,19 @@
       </geometry>
     </collision>
   </link>
+  
+  <gazebo reference="base_link">
+    <mu1 value="200000.0"/>
+    <mu2 value="200000.0"/>
+    <kp value="100000000.0"/>
+    <kd value="1.0"/>
+  </gazebo>
+  
+  <joint name="dummy_joint" type="fixed">
+    <parent link="dummy" />
+    <child link="base_link" />
+  </joint>
+  
   <link
     name="Link1">
     <inertial>
@@ -98,6 +153,7 @@
       upper="3.1"
       effort="60"
       velocity="3.14" />
+	<dynamics damping="50" friction="1"/>
   </joint>
   <link
     name="Link2">
@@ -156,6 +212,7 @@
       upper="2.268"
       effort="60"
       velocity="3.14" />
+	<dynamics damping="50" friction="1"/>
   </joint>
   <link
     name="Link3">
@@ -214,6 +271,7 @@
       upper="2.355"
       effort="30"
       velocity="3.92" />
+	<dynamics damping="50" friction="1"/>
   </joint>
   <link
     name="Link4">
@@ -272,6 +330,7 @@
       upper="3.1"
       effort="10"
       velocity="3.92" />
+	<dynamics damping="50" friction="1"/>
   </joint>
   <link
     name="Link5">
@@ -330,6 +389,7 @@
       upper="2.233"
       effort="10"
       velocity="3.92" />
+	<dynamics damping="50" friction="1"/>
   </joint>
   <link
     name="Link6">
@@ -388,32 +448,66 @@
       upper="6.28"
       effort="10"
       velocity="3.92" />
+	<dynamics damping="50" friction="1"/>
   </joint>
+  
+  <!-- Transmissions for ROS Control -->
+  <xacro:macro name="transmission_block" params="joint_name">
+    <transmission name="tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+    
+  <xacro:transmission_block joint_name="joint1"/>
+  <xacro:transmission_block joint_name="joint2"/>
+  <xacro:transmission_block joint_name="joint3"/>
+  <xacro:transmission_block joint_name="joint4"/>
+  <xacro:transmission_block joint_name="joint5"/>
+  <xacro:transmission_block joint_name="joint6"/>
 
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/arm</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
 
-<!--gazebo 有自己的颜色设置标签-->
+  <!--gazebo 有自己的颜色设置标签-->
   <gazebo reference="base_link">
-      <material>Gazebo/Bleck</material>
+      <material>Gazebo/White</material>
   </gazebo>
 
   <gazebo reference="Link1">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/TurquoiseGlowOutline</material>
   </gazebo>
 
   <gazebo reference="Link2">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/TurquoiseGlowOutline</material>
   </gazebo>
 
   <gazebo reference="Link3">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/TurquoiseGlowOutline</material>
   </gazebo>
 
   <gazebo reference="Link4">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/TurquoiseGlowOutline</material>
   </gazebo>
 
   <gazebo reference="Link5">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link6">
+      <material>Gazebo/Com</material>
   </gazebo>
 
 </robot>

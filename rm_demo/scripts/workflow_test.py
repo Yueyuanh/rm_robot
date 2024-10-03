@@ -30,8 +30,8 @@ def move_arm_to_grasp_target():
     target_pose.position.z = 0.5 # 请根据实际情况设置目标位置的z坐标
 
 
-    roll = 2
-    pitch = 1.57
+    roll = 0
+    pitch = 0
     yaw = 0.0
 
     rotation=R.from_euler("xyz",[roll,pitch,yaw])
@@ -62,7 +62,7 @@ def move_arm_to_grasp_target():
 
     roll = 0
     pitch = 0
-    yaw = 0.0
+    yaw = 0
 
     rotation=R.from_euler("xyz",[roll,pitch,yaw])
     quaternion=rotation.as_quat()

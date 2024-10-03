@@ -2,6 +2,11 @@
 <robot  name="rm_65" xmlns:xacro="http://www.ros.org/wiki/xacro">
 <xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.transmission.xacro"/>
 <xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.gazebo.xacro"/>
+
+
+
+<!-- <xacro:include filename="$(find rm_description)/urdf/EG2-4C2/urdf/EG2-4C2.urdf.xacro"/> -->
+
   <!-- Inertial matrix -->
   <xacro:macro name="inertial_matrix" params="mass">
     <inertial>
@@ -451,6 +456,8 @@
 	<dynamics damping="50" friction="1"/>
   </joint>
   
+  
+
   <!-- Transmissions for ROS Control -->
   <xacro:macro name="transmission_block" params="joint_name">
     <transmission name="tran1">
@@ -480,4 +487,34 @@
       <legacyModeNS>true</legacyModeNS>
     </plugin>
   </gazebo>
+
+  <!--gazebo 有自己的颜色设置标签-->
+  <gazebo reference="base_link">
+      <material>Gazebo/White</material>
+  </gazebo>
+
+  <gazebo reference="Link1">
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link2">
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link3">
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link4">
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link5">
+      <material>Gazebo/TurquoiseGlowOutline</material>
+  </gazebo>
+
+  <gazebo reference="Link6">
+      <material>Gazebo/Com</material>
+  </gazebo>
+
 </robot>

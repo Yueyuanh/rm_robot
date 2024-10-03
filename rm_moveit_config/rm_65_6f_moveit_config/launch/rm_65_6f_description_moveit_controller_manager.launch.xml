@@ -10,7 +10,7 @@
   <param name="use_controller_manager" value="$(arg use_controller_manager)" />
   <!-- loads ros_controllers to the param server -->
   <!-- <rosparam file="$(find rm_65_6f_moveit_config)/config/ros_controllers.yaml"/> -->
-  <rosparam file="$(find rm_65_6f_moveit_config)/config/controllers.yaml"/>
-  <!-- <rosparam file="$(find rm_65_6f_moveit_config)/config/controllers_gazebo.yaml"/> -->
+  <!-- <rosparam file="$(find rm_65_6f_moveit_config)/config/controllers.yaml"/> -->
+  <rosparam file="$(find rm_65_6f_moveit_config)/config/controllers_gazebo.yaml"/>
   </launch>
   
