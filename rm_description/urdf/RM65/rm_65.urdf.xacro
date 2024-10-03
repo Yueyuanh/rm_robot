@@ -2,10 +2,10 @@
 <robot  name="rm_65" xmlns:xacro="http://www.ros.org/wiki/xacro">
 <xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.transmission.xacro"/>
 <xacro:include filename="$(find rm_description)/urdf/RM65/rm_65.gazebo.xacro"/>
+<xacro:include filename="$(find realsense_ros_gazebo)/xacro/depthcam.xacro"/>
+<xacro:include filename="$(find rm_description)/urdf/RM65/gripper.xacro"/>
 
 
-
-<!-- <xacro:include filename="$(find rm_description)/urdf/EG2-4C2/urdf/EG2-4C2.urdf.xacro"/> -->
 
   <!-- Inertial matrix -->
   <xacro:macro name="inertial_matrix" params="mass">
@@ -456,7 +456,31 @@
 	<dynamics damping="50" friction="1"/>
   </joint>
   
-  
+
+
+
+ <!-- gripper -->
+<!-- <xacro:simple_gripper gripper_name="gripper1" parent_link="Link6" 
+                      
+                      finger_length="0.01" finger_width="0.01" finger_thickness="0.05">
+  <origin xyz="0 0 0.02" rpy="0 0 1.57"/>
+</xacro:simple_gripper>
+ -->
+
+<!-- <xacro:simple_gripper gripper_name="gripper1" parent_link="Link6" 
+                      finger_length="0.1" finger_width="0.02" finger_thickness="0.01">
+  <origin xyz="0 0 1" rpy="0 0 0"/>
+</xacro:simple_gripper> -->
+
+
+
+<!-- realsense -->
+<xacro:realsense_d435 sensor_name="d435" parent_link="Link6" rate="10">
+   <origin rpy="3.1415 4.712 0 " xyz="0.07 0 0"/>
+</xacro:realsense_d435>
+
+
+
 
   <!-- Transmissions for ROS Control -->
   <xacro:macro name="transmission_block" params="joint_name">

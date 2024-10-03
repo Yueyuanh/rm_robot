@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot  name="EG2-4C2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot  name="figuer" xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+   <xacro:macro name="figuer" params="figure_name parent_link *origin rate">
+      
+
   <link
     name="4C2_baselink">
     <inertial>
@@ -22,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_baselink.STL" />
+          filename="package://figuer/meshes/4C2_baselink.STL" />
       </geometry>
       <material
         name="">
@@ -36,10 +40,18 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_baselink.STL" />
+          filename="package://figuer/meshes/4C2_baselink.STL" />
       </geometry>
     </collision>
   </link>
+
+  <joint name="${figure_name}_joint" type="fixed">
+      <parent link="${parent_link}"/>
+      <child link="4C2_baselink" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+
   <link
     name="4C2_Link1">
     <inertial>
@@ -62,7 +74,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link1.STL" />
+          filename="package://figuer/meshes/4C2_Link1.STL" />
       </geometry>
       <material
         name="">
@@ -76,7 +88,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link1.STL" />
+          filename="package://figuer/meshes/4C2_Link1.STL" />
       </geometry>
     </collision>
   </link>
@@ -121,7 +133,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link5.STL" />
+          filename="package://figuer/meshes/4C2_Link5.STL" />
       </geometry>
       <material
         name="">
@@ -135,7 +147,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link5.STL" />
+          filename="package://figuer/meshes/4C2_Link5.STL" />
       </geometry>
     </collision>
   </link>
@@ -180,7 +192,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link2.STL" />
+          filename="package://figuer/meshes/4C2_Link2.STL" />
       </geometry>
       <material
         name="">
@@ -194,7 +206,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link2.STL" />
+          filename="package://figuer/meshes/4C2_Link2.STL" />
       </geometry>
     </collision>
   </link>
@@ -239,7 +251,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link3.STL" />
+          filename="package://figuer/meshes/4C2_Link3.STL" />
       </geometry>
       <material
         name="">
@@ -253,7 +265,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link3.STL" />
+          filename="package://figuer/meshes/4C2_Link3.STL" />
       </geometry>
     </collision>
   </link>
@@ -298,7 +310,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link4.STL" />
+          filename="package://figuer/meshes/4C2_Link4.STL" />
       </geometry>
       <material
         name="">
@@ -312,7 +324,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link4.STL" />
+          filename="package://figuer/meshes/4C2_Link4.STL" />
       </geometry>
     </collision>
   </link>
@@ -357,7 +369,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link6.STL" />
+          filename="package://figuer/meshes/4C2_Link6.STL" />
       </geometry>
       <material
         name="">
@@ -371,7 +383,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://EG2-4C2/meshes/4C2_Link6.STL" />
+          filename="package://figuer/meshes/4C2_Link6.STL" />
       </geometry>
     </collision>
   </link>
@@ -404,4 +416,6 @@
       <hardwareInterface>PositionJointInterface</hardwareInterface>
     </actuator>
   </transmission>
+</xacro:macro>
+
 </robot>

@@ -10,6 +10,26 @@ import geometry_msgs.msg
 from sensor_msgs.msg import Joy
 from scipy.spatial.transform import Rotation as R
 
+pi=3.1415926
+pi2=pi/2
+
+dist={
+    "x":0,"y":1,"z":2,
+    "r":3,"p":4,"y":5,
+    "delay":6
+}
+trail=[
+    #x,y,z,roll,yaw,pitch
+    [0,-0.4,0.3,   0,  pi, pi2,2], #到达瓶盖处
+    [0,-0.4,0.2,   0,  pi, pi2,1],#旋转开盖
+    [0,-0.4,0.2,   0,  pi,-pi2,1],#旋转开盖
+    [0,-0.4,0.25,  0,  pi,-pi2,1],#放置瓶盖1
+    [0,-0.2,0.2,   0,  pi,-pi2,1],#放置瓶盖2
+    [0,-0.2,0.1,   0,  pi,-pi2,1],#放置瓶盖3
+    [0,-0.3,0.2,   pi,  pi,0,1],#抓瓶子
+]
+
+
 def move_arm_to_grasp_target():
 
     # 初始化moveit_commander和rospy节点
@@ -25,61 +45,40 @@ def move_arm_to_grasp_target():
 
     # 设置目标位置1
     target_pose = geometry_msgs.msg.Pose()
-    target_pose.position.x = -0.1 # 请根据实际情况设置目标位置的x坐标
-    target_pose.position.y = 0.2 # 请根据实际情况设置目标位置的y坐标
-    target_pose.position.z = 0.5 # 请根据实际情况设置目标位置的z坐标
+
+    for i in range(len(trail)):
+        target_pose.position.x = trail[i][0] 
+        target_pose.position.y = trail[i][1]
+        target_pose.position.z = trail[i][2]
 
 
-    roll = 0
-    pitch = 0
-    yaw = 0.0
+        roll =  trail[i][3]    #腕关节
+        pitch = trail[i][4]    #朝下
+        yaw =   trail[i][5]    #转轴
 
-    rotation=R.from_euler("xyz",[roll,pitch,yaw])
-    quaternion=rotation.as_quat()
+        rotation=R.from_euler("xyz",[roll,pitch,yaw])
+        quaternion=rotation.as_quat()
+        # quaternion=[0.75,-0.65,0,0.4]
+        # 设置目标姿态
+        target_pose.orientation.x = quaternion[0] #
+        target_pose.orientation.y = quaternion[1] #
+        target_pose.orientation.z = quaternion[2] #
+        target_pose.orientation.w = quaternion[3] #
 
-    # 设置目标姿态
-    target_pose.orientation.x = quaternion[0] # 替换为目标姿态的x分量
-    target_pose.orientation.y = quaternion[1] # 替换为目标姿态的y分量
-    target_pose.orientation.z = quaternion[2] # 替换为目标姿态的z分量
-    target_pose.orientation.w = quaternion[3] # 替换为目标姿态的w分量
+        rospy.loginfo(target_pose)
 
-    rospy.loginfo(target_pose)
+        rotation_q=R.from_quat(quaternion)
+        euler_angle=rotation_q.as_euler("xyz",degrees=False)
+        rospy.loginfo(euler_angle)
 
-    group.set_pose_target(target_pose)
-    # 规划并执行路径
-    plan = group.go()
-
-    rospy.loginfo("***step-1 over!***")
-
-    rospy.sleep(2)
-
- # 设置目标位置2
-    target_pose = geometry_msgs.msg.Pose()
-    target_pose.position.x = -0.1 # 请根据实际情况设置目标位置的x坐标
-    target_pose.position.y = 0.2 # 请根据实际情况设置目标位置的y坐标
-    target_pose.position.z = 0.5 # 请根据实际情况设置目标位置的z坐标
+        group.set_pose_target(target_pose)
+        # 规划并执行路径
+        plan = group.go()
+        info="step "+str(i+1)+" over"
+        rospy.loginfo(info)
+        rospy.sleep(trail[i][6])
 
 
-    roll = 0
-    pitch = 0
-    yaw = 0
-
-    rotation=R.from_euler("xyz",[roll,pitch,yaw])
-    quaternion=rotation.as_quat()
-
-    # 设置目标姿态
-    target_pose.orientation.x = quaternion[0] # 替换为目标姿态的x分量
-    target_pose.orientation.y = quaternion[1] # 替换为目标姿态的y分量
-    target_pose.orientation.z = quaternion[2] # 替换为目标姿态的z分量
-    target_pose.orientation.w = quaternion[3] # 替换为目标姿态的w分量
-
-    rospy.loginfo(target_pose)
-
-    group.set_pose_target(target_pose)
-    # 规划并执行路径
-    plan = group.go()
-
-    rospy.loginfo("***step-2 over!***")
 
     group.stop() # 停止所有剩余的运动
     group.clear_pose_targets()
